@@ -6,7 +6,6 @@ from functools import wraps
 from queue import Queue
 from threading import Thread
 from typing import Any, Callable, Dict, List
-import traceback
 
 import numpy as np
 import openai
@@ -368,7 +367,6 @@ class ColumnEntityChecker(BaseSQLDatabaseTool, BaseTool):
             schema_name = None
             print("superman before")
             print(table_name)
-            traceback.print_exc()
             if "." in table_name:
                 print("superman inside happy path")
                 schema_name, table_name = table_name.split(".")
