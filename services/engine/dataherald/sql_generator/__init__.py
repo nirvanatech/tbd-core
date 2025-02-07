@@ -215,6 +215,9 @@ class SQLGenerator(Component, ABC):
                             response.sql = replace_unprocessable_characters(
                                 self.remove_markdown(chunk["output"])
                             )
+                        queue.put(
+                            f'\n$^sql_id:{response.id}^$'
+                        )
                     else:
                         raise ValueError()
         except SQLInjectionError as e:
