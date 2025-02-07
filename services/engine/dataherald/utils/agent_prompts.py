@@ -29,6 +29,7 @@ tip4) The Question/SQL pairs are labelled as correct pairs, so you can use them 
 tip5) If SQL results has None or NULL values, handle them by adding a WHERE clause to filter them out.
 tip6) The existence of the string values in the columns should always be checked using the DbColumnEntityChecker tool.
 tip7) You should always execute the SQL query by calling the SqlDbQuery tool to make sure the results are correct.
+tip8) You must not strip away the schema name from the table name.
 """  # noqa: E501
 
 PLAN_WITH_INSTRUCTIONS = """1) Use the DbTablesWithRelevanceScores tool to find relevant tables.
@@ -45,6 +46,7 @@ tip2) Always call the GetAdminInstructions tool before generating the SQL query,
 tip3) If SQL results has None or NULL values, handle them by adding a WHERE clause to filter them out.
 tip4) The existence of the string values in the columns should always be checked using the DbColumnEntityChecker tool.
 tip5) You should always execute the SQL query by calling the SqlDbQuery tool to make sure the results are correct.
+tip6) You must not strip away the schema name from the table name.
 """  # noqa: E501
 
 PLAN_WITH_FEWSHOT_EXAMPLES = """1) Use the FewshotExamplesRetriever tool to retrieve samples of Question/SQL pairs that are similar to the given question, if there is a similar question among the examples, use the SQL query from the example and modify it to fit the given question.
@@ -62,6 +64,7 @@ tip3) The Question/SQL pairs are labelled as correct pairs, so you can use them 
 tip4) If SQL results has None or NULL values, handle them by adding a WHERE clause to filter them out.
 tip5) The existence of the string values in the columns should always be checked using the DbColumnEntityChecker tool.
 tip6) You should always execute the SQL query by calling the SqlDbQuery tool to make sure the results are correct.
+tip7) You must not strip away the schema name from the table name.
 """  # noqa: E501
 
 PLAN_BASE = """1) Use the DbTablesWithRelevanceScores tool to find relevant tables.
@@ -76,6 +79,7 @@ tip1) If the SQL query resulted in errors or not correct results, rewrite the SQ
 tip2) If SQL results has None or NULL values, handle them by adding a WHERE clause to filter them out.
 tip3) The existence of the string values in the columns should always be checked using the DbColumnEntityChecker tool.
 tip4) You should always execute the SQL query by calling the SqlDbQuery tool to make sure the results are correct.
+tip5) You must not strip away the schema name from the table name.
 """  # noqa: E501
 
 FORMAT_INSTRUCTIONS = """Use the following format:
