@@ -61,6 +61,7 @@ class SQLGenerator(Component, ABC):
         matches = re.findall(pattern, query, re.DOTALL)
         if matches:
             return matches[0].strip()
+        print("No markdown found in query", query)
         return query
 
     @staticmethod
@@ -83,6 +84,7 @@ class SQLGenerator(Component, ABC):
 
         def formatter(match):
             original_sql = match.group(1)
+            print("in formatter", original_sql)
             formatted_sql = self.format_sql_query(original_sql)
             return "```sql\n" + formatted_sql + "\n```"
 
@@ -212,6 +214,7 @@ class SQLGenerator(Component, ABC):
                             f'\n**Final Answer:**\n {self.format_sql_query_intermediate_steps(chunk["output"])}'
                         )
                         if "```sql" in chunk["output"]:
+                            print("in output")
                             response.sql = replace_unprocessable_characters(
                                 self.remove_markdown(chunk["output"])
                             )
