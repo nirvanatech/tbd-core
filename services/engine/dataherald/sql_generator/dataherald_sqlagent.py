@@ -365,11 +365,15 @@ class ColumnEntityChecker(BaseSQLDatabaseTool, BaseTool):
             
             # Handle schema-qualified table names
             schema_name = None
+            print("superman before")
+            print(table_name)
             if "." in table_name:
+                print("superman inside happy path")
                 schema_name, table_name = table_name.split(".")
                 # Construct fully qualified table name
                 full_table_name = f"{schema_name}.{table_name}"
             else:
+                print("superman inside bad path")
                 if self.is_multiple_schema:
                     raise Exception("Table name should be in the format schema_name.table_name")
                 full_table_name = table_name
