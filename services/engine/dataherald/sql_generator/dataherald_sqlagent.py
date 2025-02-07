@@ -368,7 +368,7 @@ class ColumnEntityChecker(BaseSQLDatabaseTool, BaseTool):
             schema_name = None
             print("superman before")
             print(table_name)
-            print(traceback.print_stack())
+            print(traceback.print_exc())
             if "." in table_name:
                 print("superman inside happy path")
                 schema_name, table_name = table_name.split(".")
