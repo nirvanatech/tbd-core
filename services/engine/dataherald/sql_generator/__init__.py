@@ -84,6 +84,7 @@ class SQLGenerator(Component, ABC):
 
         def formatter(match):
             original_sql = match.group(1)
+            print("in formatter", original_sql)
             formatted_sql = self.format_sql_query(original_sql)
             return "```sql\n" + formatted_sql + "\n```"
 
