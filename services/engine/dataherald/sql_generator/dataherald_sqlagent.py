@@ -359,38 +359,47 @@ class ColumnEntityChecker(BaseSQLDatabaseTool, BaseTool):
         try:
             schema, entity = tool_input.split(",")
             table_name, column_name = schema.split("->")
-            table_name = replace_unprocessable_characters(table_name)
+            table_name = replace_unprocessable_characters(table_name.strip())
             column_name = replace_unprocessable_characters(column_name).strip()
-            if "." not in table_name and self.is_multiple_schema:
-                raise Exception(
-                    "Table name should be in the format schema_name.table_name"
-                )
+            entity = entity.strip()
+            
+            # Handle schema-qualified table names
+            schema_name = None
+            if "." in table_name:
+                schema_name, table_name = table_name.split(".")
+                # Construct fully qualified table name
+                full_table_name = f"{schema_name}.{table_name}"
+            else:
+                if self.is_multiple_schema:
+                    raise Exception("Table name should be in the format schema_name.table_name")
+                full_table_name = table_name
+
+            search_pattern = f"%{entity.lower()}%"
+            search_query = f"SELECT DISTINCT {column_name} FROM {full_table_name} WHERE {column_name} ILIKE :search_pattern"  # noqa: S608
+            try:
+                search_results = self.db.engine.execute(
+                    search_query, {"search_pattern": search_pattern}
+                ).fetchall()
+                search_results = search_results[:25]
+            except SQLAlchemyError:
+                search_results = []
+
+            distinct_query = f"SELECT DISTINCT {column_name} FROM {full_table_name}"  # noqa: S608
+            results = self.db.engine.execute(distinct_query).fetchall()
+            results = self.find_similar_strings(results, entity)
+            similar_items = "Similar items:\n"
+            already_added = {}
+            for item in results:
+                similar_items += f"{item[0]}\n"
+                already_added[item[0]] = True
+            if len(search_results) > 0:
+                for item in search_results:
+                    if item[0] not in already_added:
+                        similar_items += f"{item[0]}\n"
+            return similar_items
+
         except ValueError:
             return "Invalid input format, use following format: table_name -> column_name, entity (entity should be a string without ',')"
-        search_pattern = f"%{entity.strip().lower()}%"
-        search_query = f"SELECT DISTINCT {column_name} FROM {table_name} WHERE {column_name} ILIKE :search_pattern"  # noqa: S608
-        try:
-            search_results = self.db.engine.execute(
-                search_query, {"search_pattern": search_pattern}
-            ).fetchall()
-            search_results = search_results[:25]
-        except SQLAlchemyError:
-            search_results = []
-        distinct_query = (
-            f"SELECT DISTINCT {column_name} FROM {table_name}"  # noqa: S608
-        )
-        results = self.db.engine.execute(distinct_query).fetchall()
-        results = self.find_similar_strings(results, entity)
-        similar_items = "Similar items:\n"
-        already_added = {}
-        for item in results:
-            similar_items += f"{item[0]}\n"
-            already_added[item[0]] = True
-        if len(search_results) > 0:
-            for item in search_results:
-                if item[0] not in already_added:
-                    similar_items += f"{item[0]}\n"
-        return similar_items
 
     async def _arun(
         self,
