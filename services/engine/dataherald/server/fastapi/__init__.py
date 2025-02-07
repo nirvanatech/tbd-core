@@ -6,6 +6,8 @@ from fastapi import BackgroundTasks, status
 from fastapi import FastAPI as _FastAPI
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.routing import APIRoute
+from fastapi.middleware.cors import CORSMiddleware
+
 
 import dataherald
 from dataherald.api.types.query import Query
@@ -62,6 +64,15 @@ class FastAPI(dataherald.server.Server):
         super().__init__(settings)
         self._app = fastapi.FastAPI(debug=True)
         self._api: dataherald.api.API = dataherald.client(settings)
+
+        # Add CORS middleware
+        self._app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["http://localhost:3000"],  # Add your React app's URL
+            allow_credentials=True,
+            allow_methods=["*"],  # Allows all methods
+            allow_headers=["*"],  # Allows all headers
+        )
 
         self.router = fastapi.APIRouter()
 
