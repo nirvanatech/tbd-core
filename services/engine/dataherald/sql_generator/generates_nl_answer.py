@@ -89,9 +89,12 @@ class GeneratesNlAnswer:
         chain = LLMChain(llm=self.llm, prompt=chat_prompt)
         nl_resp = chain.invoke(
             {
-                "prompt": prompt.text + " - Do not modify the sql_query and sql_query_result and make the output text based on the sql_query and sql_query_result",
+                #Do not modify the sql_query and sql_query_result and make the output text based on the sql_query and sql_query_result
+                "prompt": prompt.text,
                 "sql_query": sql_generation.sql,
                 "sql_query_result": "\n".join([str(row) for row in rows]),
+                "prompt_override": "If the prompt doesn't match with the sql_query and sql_query_result, disregard the provided prompt and"
+                                   "construct a prompt based on the sql_query and sql_query_result",
             }
         )
         return NLGeneration(
