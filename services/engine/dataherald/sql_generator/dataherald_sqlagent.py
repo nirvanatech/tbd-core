@@ -621,7 +621,6 @@ class SQLDatabaseToolkit(BaseToolkit):
         )
         tools.append(column_sample_tool)
         if self.few_shot_examples is not None:
-            print("superman log")
             get_fewshot_examples_tool = GetFewShotExamples(
                 db=self.db,
                 context=self.context,
@@ -747,12 +746,16 @@ class DataheraldSQLAgent(SQLGenerator):
         few_shot_examples, instructions = context_store.retrieve_context_for_question(
             user_prompt, number_of_samples=self.max_number_of_examples
         )
+        print("printing few_shot_examples inside generate_response")
+        print(few_shot_examples)
         if few_shot_examples is not None:
             new_fewshot_examples = self.remove_duplicate_examples(few_shot_examples)
             number_of_samples = len(new_fewshot_examples)
         else:
             new_fewshot_examples = None
             number_of_samples = 0
+        print("printing new_fewshot_examples inside generate_response")
+        print(new_fewshot_examples)
         logger.info(f"Generating SQL response to question: {str(user_prompt.dict())}")
         self.database = SQLDatabase.get_sql_engine(database_connection)
         # Set Embeddings class depending on azure / not azure
@@ -868,12 +871,16 @@ class DataheraldSQLAgent(SQLGenerator):
         few_shot_examples, instructions = context_store.retrieve_context_for_question(
             user_prompt, number_of_samples=self.max_number_of_examples
         )
+        print("printing few_shot_examples inside stream_response")
+        print(few_shot_examples)
         if few_shot_examples is not None:
             new_fewshot_examples = self.remove_duplicate_examples(few_shot_examples)
             number_of_samples = len(new_fewshot_examples)
         else:
             new_fewshot_examples = None
             number_of_samples = 0
+        print("printing new_fewshot_examples inside stream_response")
+        print(new_fewshot_examples)
         self.database = SQLDatabase.get_sql_engine(database_connection)
         # Set Embeddings class depending on azure / not azure
         if self.system.settings["azure_api_key"] is not None:
