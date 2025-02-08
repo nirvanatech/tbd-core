@@ -112,6 +112,9 @@ class TableDescriptionRepository:
         if table_description_request.metadata is not None:
             table.metadata = table_description_request.metadata
 
+        if table_description_request.metadata.get("status") is not None:
+            table.status = table_description_request.metadata["status"]
+
         if table_description_request.columns:
             columns = [column.name for column in table.columns]
 
