@@ -718,6 +718,8 @@ class DataheraldSQLAgent(SQLGenerator):
         context: List[dict] = None,
         metadata: dict = None,
     ) -> SQLGeneration:  # noqa: PLR0912
+        print("printing user_prompt inside generate_response")
+        print(user_prompt)
         context_store = self.system.instance(ContextStore)
         storage = self.system.instance(DB)
         response = SQLGeneration(
@@ -743,6 +745,8 @@ class DataheraldSQLAgent(SQLGenerator):
         db_scan = SQLGenerator.filter_tables_by_schema(
             db_scan=db_scan, prompt=user_prompt
         )
+        print("printing user_prompt inside generate_response just before")
+        print(user_prompt)
         few_shot_examples, instructions = context_store.retrieve_context_for_question(
             user_prompt, number_of_samples=self.max_number_of_examples
         )
