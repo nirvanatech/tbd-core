@@ -282,6 +282,7 @@ class SQLGenerationService:
             )
         sql_generation.metadata = metadata_request.metadata
         if metadata_request.metadata and metadata_request.metadata.get("updated_sql") is not None:
+            sql_generation.sql = metadata_request.metadata.get("updated_sql")
             print("updated_sql exists and is not None")
         else:
             print("updated_sql is missing or None")
