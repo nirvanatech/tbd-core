@@ -697,7 +697,7 @@ class DataheraldFinetuningAgent(SQLGenerator):
             db_scan=db_scan, prompt=user_prompt
         )
         _, instructions = context_store.retrieve_context_for_question(
-            user_prompt, number_of_samples=1
+            user_prompt, number_of_samples=5
         )
         finetunings_repository = FinetuningsRepository(storage)
         finetuning = finetunings_repository.find_by_id(self.finetuning_id)
