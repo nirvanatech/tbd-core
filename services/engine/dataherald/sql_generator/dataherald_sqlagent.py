@@ -621,6 +621,7 @@ class SQLDatabaseToolkit(BaseToolkit):
         )
         tools.append(column_sample_tool)
         if self.few_shot_examples is not None:
+            print("superman log")
             get_fewshot_examples_tool = GetFewShotExamples(
                 db=self.db,
                 context=self.context,
