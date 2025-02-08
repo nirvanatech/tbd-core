@@ -281,6 +281,9 @@ class SQLGenerationService:
                 f"Sql generation {sql_generation_id} not found"
             )
         sql_generation.metadata = metadata_request.metadata
+        if metadata_request.metadata.get("updated_sql"):
+            sql_generation.sql = metadata_request.metadata.get("updated_sql")
+        sql_generation.sql = metadata_request.sql
         return self.sql_generation_repository.update(sql_generation)
 
     def create_dataframe(self, sql_generation_id):
